@@ -1,0 +1,20 @@
+h1, h2, h3, h4, h5, h6 {
+  color: #dc241f;
+}
+
+.row {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.panel {
+  width: 100%;
+}
+
+#header, #footer {
+  background-color: #eee;
+}
+
+#header {
+  border-bottom: 1px solid ;
+}
