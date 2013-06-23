@@ -27,7 +27,7 @@
       .attr('r', 6);
     svg.append('text')
       .classed('figure', true)
-      .text(point.steam + ' units')
+      .text(point.steam + ' lbs/hr')
       .attr('x', width + 'px')
       .attr('y', '16px')
       .style('font-size', '26px')
