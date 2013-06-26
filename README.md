@@ -6,6 +6,18 @@ Alexander Ostrow and Marc-Etienne Brunet, Summer 2013
 
 Pulse energy API documentation: http://developer.pulseenergy.com/ (100 req/hr limit)
 
+### Environment Variables
+
+Not included in the version control is a file `lib/environment_variables.rb` with the API keys, included as follows:
+
+```ruby
+# lib/environment_variables.rb
+
+ENV['PULSE_KEY'] = '********************************'
+```
+
+It will be set on the production machine as a real environment variable. 
+
 ### Database
 
 If it were CSV, it would be like the following:
