@@ -1,8 +1,8 @@
 # McGill Steam
 
-> McGill Energy Project
-> Alexander Ostrow, Marc-Etienne Brunet
-> Summer 2013
+> McGill Energy Project   
+> Alexander Ostrow, Marc-Etienne Brunet   
+> Summer 2013   
 
 ### Installing
 

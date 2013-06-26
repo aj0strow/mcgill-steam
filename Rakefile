@@ -6,7 +6,7 @@ task :environment do
 end
 
 namespace :pulse do
-  task :fetch do
-    fetch_points
+  task fetch: :environment do
+    Pulse.fetch_points(Time.now)
   end
 end
