@@ -1,10 +1,26 @@
 # McGill Steam
 
-Alexander Ostrow and Marc-Etienne Brunet, Summer 2013
+> McGill Energy Project
+> Alexander Ostrow, Marc-Etienne Brunet
+> Summer 2013
 
-### Links
+### Installing
 
-Pulse energy API documentation: http://developer.pulseenergy.com/ (100 req/hr limit)
+Clone the repository:
+
+```
+$ cd ~/where/my/projects/are
+$ git clone git@github.com:aj0strow/mcgill-steam.git
+$ cd mcgill-steam
+```
+
+See the environment variables section below, add the file, and then run:
+
+```
+$ rackup -p 1234
+```
+
+View the website at http://localhost:1234/.
 
 ### Environment Variables
 
@@ -17,6 +33,11 @@ ENV['PULSE_KEY'] = '********************************'
 ```
 
 It will be set on the production machine as a real environment variable. 
+
+### Useful Links
+
+Pulse energy API documentation: http://developer.pulseenergy.com/ (100 req/hr limit)
+
 
 ### Database
 
