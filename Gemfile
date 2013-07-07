@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '1.9.3'
 
 gem 'thin'
 gem 'sinatra'
@@ -7,7 +8,4 @@ gem 'rb-libsvm'
 gem 'data_mapper'
 gem 'dm-postgres-adapter'
 gem 'async_enum', github: 'aj0strow/async_enum'
-
-group :development do
-  gem 'tux'
-end
+gem 'tux'
