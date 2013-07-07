@@ -1,27 +1,14 @@
 require 'httparty'
 require 'time'
-
-=begin
-
-  Data points as follows:
-  
-  66077 (temperature) -> Monteal Temperature - CWTA
-  66096 (windSpeed)   -> Montreal Windspeed - CWTA
-  66094 (radiation)   -> Montreal Radiation - CWTA
-  66095 (humidity)    -> Montreal Relative Humidity - CWTA
-  45924               -> Downtown Campus - Steam Mass Flow
-
-=end
+require 'async_enum'
 
 module Pulse
   
-  POINTS = {
-    temperature: 66077,
-    wind_speed: 66096,
-    radiation: 66094,
-    humidity: 66095,
-    steam: 45924
-  }
+  RESOURCES = [ :temperature, :wind_speed, :radiation, :humidity, :steam ]
+  
+  POINTS = Hash[ RESOURCES.zip([ 66077, 66096, 66094, 66095, 45924 ]) ]
+
+  KEYS = Hash[ RESOURCES.zip(ENV['PULSE_KEYS'].split('|')) ]
   
   class Base
     include HTTParty
@@ -32,22 +19,24 @@ module Pulse
         "https://api.pulseenergy.com/pulse/1/points/#{point}/data.json"
       end
       
-      def query(time)
-        { interval: 'day', start: time.utc.iso8601, key: ENV['PULSE_KEY'] }
+      def query(time, resource)
+        key = KEYS[resource]
+        { interval: 'day', start: time.utc.iso8601, key: key }
       end
       
       def fetch(time, resource)
         point = POINTS[resource]        
-        resp = get url(point), query: query(time)
+        resp = get url(point), query: query(time, resource)
         p resp.parsed_response
       end
 
-      def fetch_points(time)
-        fetch time, :temperature
-        # fetch time, :wind_speed
-        # fetch time, :radiation
-        # fetch time, :humidity
-        # fetch time, :steam
+      def fetch_points(datetime)
+        time = datetime.to_time
+        resources = RESOURCES
+        data = resources.async.map do |resource|
+          Pulse::Base.fetch time, resource
+        end
+        data
       end
 
     end
