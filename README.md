@@ -51,16 +51,27 @@ Pulse energy API documentation: http://developer.pulseenergy.com/ (100 req/hr li
 
 ### Database
 
-If it were CSV, it would be like the following:
+There are two models. `PastRecord` and `Prediction`. The idea is that there is a single PastRecord per hour on the hour, and many Predictions for each hour in the future, where the most recent can be grabbed from the `updated_at` field (automatically set, so it is read only.)
 
-| datetime | weekday (0-6) | hour\_of\_day | temperature | wind\_speed | radiation | humidity | steam | fc0 | fc3 | fc11 | fc23 |
-| -------- |-------------- | ------------- | ----------- | ----------- | --------- | -------- | ----- | --- | --- | ---- | -----|
-| "2013-06-14T19:00:00Z" | 5 | 19 | 22.0 | 1.0 | 187.0 | 0.7145 | 15640.4 | NA | 16060.0 | 18040.4 | 15040.4 |
-| ** "2013-06-14T18:00:00Z" | 5 | 18 | 24.5 | 3.8 | 200.4 | 0.7890 | 15040.4 | 15040.4 | 18060.0 | 18040.4 | 15740.0 |
-| "2013-06-14T17:00:00Z" | 5 | 17 | 25.5 | 5.7 | 250.6 | 0.6756 | 15786.0 | 15040.4 | 16400.4 | 18060.0 | 18040.4 |
+Predictions are theoretically useless once the hour has passed, but could be useful for training the machine learning algorithm. 
 
-The idea is that the 2nd line (**) is the current hour. It _and everything after it_ is a forecast, while everything before is history. Note that `fcX` is what the steam was predicted to be X hours before it got to position **. We want to store this to keep track of how good the forecasts are.
- 
+##### PastRecord
+
+PastRecords should be queried by their `recorded_at` field, as that is the unique natural key. 
+
+| id | recorded\_at           | temperature | wind\_speed | radiation | humidity | steam   |
+| -- | ---------------------- | ----------- | ----------- | --------- | -------- | ------- |
+| 1  | "2013-06-14T19:00:00Z" | 22.0        | 1.0         | 187.0     | 0.7145   | 15640.4 |
+| 2  | "2013-06-14T18:00:00Z" | 24.5        | 3.8         | 200.4     | 0.7890   | 15040.7 |
+| 3  | "2013-06-14T17:00:00Z" | 25.5        | 5.7         | 250.6     | 0.6756   | 15786.0 |
+
+##### Prediction
+
+| id | predicted\_for         | steam   | updated\_at            |
+| -- | ---------------------- | ------- | ---------------------- |
+| 1  | "2013-06-14T23:00:00Z" | 15652.4 | "2013-06-14T18:00:00Z" |
+| 2  | "2013-06-14T22:00:00Z" | 16048.1 | "2013-06-14T18:00:00Z" |
+
 ### Product
 
 - A graph showing forecasts for the next day (week? year?) with confidence intervals.

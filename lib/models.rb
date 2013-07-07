@@ -7,7 +7,7 @@ class Prediction
   include DataMapper::Resource
   
   property :id, Serial, key: true
-  property :predicted_for, DateTime
+  property :predicted_for, DateTime, index: true
   property :steam, Float
   
   # auto-updated, READ ONLY!
