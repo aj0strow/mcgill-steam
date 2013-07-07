@@ -4,6 +4,8 @@
 > Alexander Ostrow, Marc-Etienne Brunet   
 > Summer 2013   
 
+http://mcgill-steam.herokuapp.com/
+
 ### Installing
 
 Clone the repository:
@@ -24,10 +26,10 @@ View the website at http://localhost:1234/.
 
 ### Environment Variables
 
-Not included in the version control is a file `lib/environment_variables.rb` with the API keys, included as follows:
+Not included in the version control is a file `config/environment_variables.rb` with the API keys, included as follows:
 
 ```ruby
-# lib/environment_variables.rb
+# config/environment_variables.rb
 
 # 5 pipe-delimited API keys
 ENV['PULSE_KEYS'] = '*********|********|********|********|********'
