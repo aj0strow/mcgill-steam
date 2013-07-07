@@ -59,18 +59,20 @@ Predictions are theoretically useless once the hour has passed, but could be use
 
 PastRecords should be queried by their `recorded_at` field, as that is the unique natural key. 
 
-| id | recorded\_at           | temperature | wind\_speed | radiation | humidity | steam   |
-| -- | ---------------------- | ----------- | ----------- | --------- | -------- | ------- |
-| 1  | "2013-06-14T19:00:00Z" | 22.0        | 1.0         | 187.0     | 0.7145   | 15640.4 |
-| 2  | "2013-06-14T18:00:00Z" | 24.5        | 3.8         | 200.4     | 0.7890   | 15040.7 |
-| 3  | "2013-06-14T17:00:00Z" | 25.5        | 5.7         | 250.6     | 0.6756   | 15786.0 |
+| id | recorded\_at           | temperature | wind\_speed | radiation | humidity | steam   |  
+| -- | ---------------------- | ----------- | ----------- | --------- | -------- | ------- |  
+| 1  | "2013-06-14T19:00:00Z" | 22.0        | 1.0         | 187.0     | 0.7145   | 15640.4 |  
+| 2  | "2013-06-14T18:00:00Z" | 24.5        | 3.8         | 200.4     | 0.7890   | 15040.7 |  
+| 3  | "2013-06-14T17:00:00Z" | 25.5        | 5.7         | 250.6     | 0.6756   | 15786.0 |  
 
 ##### Prediction
 
-| id | predicted\_for         | steam   | updated\_at            |
-| -- | ---------------------- | ------- | ---------------------- |
-| 1  | "2013-06-14T23:00:00Z" | 15652.4 | "2013-06-14T18:00:00Z" |
-| 2  | "2013-06-14T22:00:00Z" | 16048.1 | "2013-06-14T18:00:00Z" |
+The `predicted_for` need not be unique, but it is the natural key and is indexed. Just make sure to order_by `udated_at` when grabbing records, and limit to 1. 
+
+| id | predicted\_for         | steam   | updated\_at            |  
+| -- | ---------------------- | ------- | ---------------------- |  
+| 1  | "2013-06-14T23:00:00Z" | 15652.4 | "2013-06-14T18:00:00Z" |  
+| 2  | "2013-06-14T22:00:00Z" | 16048.1 | "2013-06-14T18:00:00Z" |  
 
 ### Product
 
