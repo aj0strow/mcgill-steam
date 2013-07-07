@@ -3,6 +3,7 @@ ENV['RACK_ENV'] = 'test'
 require 'minitest/autorun'
 require_relative '../app'
 require_relative 'fixtures'
+require_relative 'pulse_sample_data'
 
 module TestHelpers
   module ClassMethods
@@ -24,4 +25,5 @@ end
 
 class Test < MiniTest::Unit::TestCase
   include TestHelpers
+  include Pulse::SampleData
 end

@@ -13,8 +13,28 @@ task :environment do
 end
 
 namespace :pulse do
-  task fetch: :environment do
-    Pulse.fetch_points(Date.today - 3)
+  task :fetch, [:date] => :environment do |task, args|
+    print 'Interpreted date: '
+    date = case (input = args[:date])
+    when nil, ''
+      Date.today - 1
+    when String
+      Date.parse(input)
+    else
+      input.to_date
+    end
+    puts date.to_s
+    print 'Fetching and creating PastRecords... '
+    records = Pulse.fetch_records(date)
+    records.each do |attrs|
+      begin
+        PastRecord.create(attrs)
+      rescue
+        puts '!!!', "Error for #{attrs}!"
+        next
+      end
+    end
+    puts 'complete!'
   end
 end
 
