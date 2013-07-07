@@ -5,16 +5,16 @@ set :public_folder, proc{ File.join(root, 'public') }
 set :views, proc{ File.join(root, 'views') }
 
 configure :production do
-  DataMapper.setup(:default, ENV['DATABASE_URL'])
+  DataMapper.setup(:default, ENV['HEROKU_POSTGRESQL_GOLD_URL'])
 end
 
 configure :development do
-  require_relative 'lib/environment_variables'
+  require_relative 'config/environment_variables'
   DataMapper.setup(:default, 'postgres://mcgill_steam@localhost/mcgill_steam_development')
 end
 
 configure :test do
-  require_relative 'lib/environment_variables'
+  require_relative 'config/environment_variables'
   DataMapper.setup(:default, 'postgres://mcgill_steam@localhost/mcgill_steam_test')
   DataMapper.auto_migrate!
 end
