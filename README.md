@@ -41,6 +41,7 @@ It will be set on the production machine as a real environment variable.
 ```
 $ rake pulse:fetch
 $ rake pulse:fetch[2013-07-03T03:00:00]
+```
 
 Fetch pulse data for the date specified (default is yesterday) and create 24 PastRecords for each hour.
 
