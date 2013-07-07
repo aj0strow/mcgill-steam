@@ -11,8 +11,8 @@ class PredictionTest < Test
     assert @prediction.updated_at
   end
   
-  test 'predicted_at required' do
-    @prediction.predicted_at = nil
+  test 'predicted_for required' do
+    @prediction.predicted_for = nil
     refute @prediction.save
   end
   

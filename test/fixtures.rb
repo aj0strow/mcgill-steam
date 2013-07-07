@@ -1,7 +1,7 @@
 require 'dm-sweatshop'
 
 Prediction.fix{{
-  predicted_at: DateTime.now,
+  predicted_for: DateTime.now,
   steam: 5600
 }}
 

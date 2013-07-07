@@ -7,7 +7,7 @@ class Prediction
   include DataMapper::Resource
   
   property :id, Serial, key: true
-  property :predicted_at, DateTime
+  property :predicted_for, DateTime
   property :steam, Float
   
   # auto-updated, READ ONLY!
@@ -18,7 +18,7 @@ class PastRecord
   include DataMapper::Resource
   
   property :id, Serial, key: true
-  property :recorded_at, DateTime, index: true
+  property :recorded_at, DateTime, unique: true, unique_index: true
   property :temperature, Float
   property :wind_speed, Float
   property :radiation, Float

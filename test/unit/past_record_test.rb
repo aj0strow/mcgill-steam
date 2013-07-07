@@ -10,6 +10,12 @@ class PastRecordTest < Test
     @record.recorded_at = nil
     refute @record.save
   end
+  
+  test 'recorded_at is unique' do
+    other = PastRecord.gen
+    @record.recorded_at = other.recorded_at
+    refute @record.save    
+  end
 
   test 'temperature required' do
     @record.temperature = nil

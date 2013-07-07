@@ -13,6 +13,20 @@ task :environment do
 end
 
 namespace :pulse do
+  
+  def try_to_save(records)
+    if records.all?(&:valid?)
+      records.each(&:save)
+      puts 'complete!'
+    else
+      puts '!!!'
+      errors = records.map do |record|
+        record.errors.full_messages.join(', ')
+      end
+      puts errors.reject(&:empty?).join("\n")
+    end
+  end
+  
   task :fetch, [:date] => :environment do |task, args|
     print 'Interpreted date: '
     date = case (input = args[:date])
@@ -25,16 +39,10 @@ namespace :pulse do
     end
     puts date.to_s
     print 'Fetching and creating PastRecords... '
-    records = Pulse.fetch_records(date)
-    records.each do |attrs|
-      begin
-        PastRecord.create(attrs)
-      rescue
-        puts '!!!', "Error for #{attrs}!"
-        next
-      end
+    records = Pulse.fetch_records(date).map do |attrs|
+      PastRecord.new(attrs)
     end
-    puts 'complete!'
+    try_to_save records
   end
 end
 

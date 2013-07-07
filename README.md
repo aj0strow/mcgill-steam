@@ -29,15 +29,22 @@ Not included in the version control is a file `lib/environment_variables.rb` wit
 ```ruby
 # lib/environment_variables.rb
 
-ENV['PULSE_KEY'] = '********************************'
+# 5 pipe-delimited API keys
+ENV['PULSE_KEYS'] = '*********|********|********|********|********'
 ```
 
 It will be set on the production machine as a real environment variable. 
 
+### Rake Tasks
+```
+$ rake pulse:fetch
+$ rake pulse:fetch[2013-07-03T03:00:00]
+
+Fetch pulse data for the date specified (default is yesterday) and create 24 PastRecords for each hour.
+
 ### Useful Links
 
 Pulse energy API documentation: http://developer.pulseenergy.com/ (100 req/hr limit)
-
 
 ### Database
 
