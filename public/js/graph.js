@@ -123,12 +123,7 @@
       .on('mouseover', pointover)
       .on('mouseout', pointout);
   }
-  
-  // replace this with a async JSON call d3.json('path/to.json', function(error, data) {})
-  update(null, [
-    { datetime: '2013-06-14T19:00:00Z', steam: '15640.4' },
-    { datetime: '2013-06-14T18:00:00Z', steam: '15640.4' },
-    { datetime: '2013-06-14T17:00:00Z', steam: '15786.0' }
-  ]);
-      
+
+  d3.json('/records.json', update);
+
 })();

@@ -108,6 +108,7 @@ DEPENDENCIES
   data_mapper
   dm-postgres-adapter
   httparty
+  multi_json
   newrelic_rpm
   rb-libsvm
   sinatra

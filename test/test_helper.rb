@@ -1,5 +1,6 @@
 ENV['RACK_ENV'] = 'test'
 
+require 'rack/test'
 require 'minitest/autorun'
 require_relative '../app'
 require_relative 'fixtures'
@@ -26,4 +27,9 @@ end
 class Test < MiniTest::Unit::TestCase
   include TestHelpers
   include Pulse::SampleData
+  include Rack::Test::Methods
+  
+  def app
+    Sinatra::Application
+  end
 end

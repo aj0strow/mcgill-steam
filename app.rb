@@ -1,5 +1,6 @@
 require 'sinatra'
 require_relative 'lib/models'
+require 'multi_json'
 
 set :public_folder, proc{ File.join(root, 'public') }
 set :views, proc{ File.join(root, 'views') }
@@ -23,7 +24,18 @@ DataMapper.auto_upgrade!
 
 require_relative 'lib/pulse'
 
-
 get '/' do
   erb :index
+end
+
+get '/records.json' do
+  days = params[:days].to_i
+  days = 10 if days <= 0
+  records = PastRecord.all(order: :recorded_at.desc, limit: days * 24)
+  structs = records.map do |record|
+    { datetime: record.recorded_at.to_time.utc.iso8601, steam: record.steam }
+  end
+    
+  content_type :json
+  MultiJson.dump(structs)
 end
