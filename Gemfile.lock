@@ -1,13 +1,8 @@
-GIT
-  remote: git://github.com/aj0strow/async_enum.git
-  revision: a7616d5c97ddb5aafa3996563f80a1ba0f2324dc
-  specs:
-    async_enum (0.0.3)
-
 GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.3.4)
+    async_enum (0.0.4)
     bcrypt-ruby (3.0.1)
     bond (0.4.3)
     daemons (1.1.9)
@@ -104,7 +99,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  async_enum!
+  async_enum
   data_mapper
   dm-postgres-adapter
   httparty
