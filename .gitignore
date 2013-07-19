@@ -1,1 +1,4 @@
 config/environment_variables.rb
+*.RData
+Gemfile.lock
+logfile
