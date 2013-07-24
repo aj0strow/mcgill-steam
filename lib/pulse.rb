@@ -43,10 +43,16 @@ module Pulse
       end
 
       def fetch_resources(time)
+        time = to_nearest_hour(time)
         pulse_responses = RESOURCES.async.map do |resource|
           Pulse::Base.fetch(time, resource)
         end
         compile_data(pulse_responses)
+      end
+      
+      def to_nearest_hour(time)
+        hour = 60 * 60
+        Time.at((time.to_f / hour).floor * hour)
       end
       
       def compile_data(pulse_responses)

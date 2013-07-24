@@ -23,7 +23,7 @@ class PastRecord
   property :wind_speed, Float
   property :radiation, Float
   property :humidity, Float
-  property :steam, Float
+  property :steam, Float, required: false
 end
 
 DataMapper.finalize

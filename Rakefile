@@ -13,7 +13,6 @@ task :environment do
 end
 
 namespace :pulse do
-  
   def try_to_save(records)
     if records.all?(&:valid?)
       records.each(&:save)
@@ -27,20 +26,24 @@ namespace :pulse do
     end
   end
   
-  task :fetch, [:date] => :environment do |task, args|
-    print 'Interpreted date: '
-    date = case (input = args[:date])
+  task :fetch, [:time] => :environment do |task, args|
+    print 'Interpreted time: '
+    time = case (input = args[:time])
     when nil, ''
-      Date.today - 1
+      Time.now
     when String
-      Date.parse(input)
+      Time.parse(input)
     else
-      input.to_date
+      input.to_time
     end
-    puts date.to_s
+    puts time.iso8601
     print 'Fetching and creating PastRecords... '
-    records = Pulse.fetch_records(date).map do |attrs|
-      PastRecord.new(attrs)
+    day = 60 * 60 * 24
+    records = Pulse.fetch_records(time) + Pulse.fetch_records(time - day)
+    records.map! do |attrs|
+      record = PastRecord.first_or_new(recorded_at: attrs[:recorded_at])
+      record.attributes = attrs
+      record
     end
     try_to_save records
   end

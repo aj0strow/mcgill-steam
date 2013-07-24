@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class PastRecordTest < Test
-  
   setup do
     @record = PastRecord.gen
   end
@@ -36,10 +35,4 @@ class PastRecordTest < Test
     @record.humidity = nil
     refute @record.save
   end
-
-  test 'steam required' do
-    @record.steam = nil
-    refute @record.save
-  end
-  
 end
