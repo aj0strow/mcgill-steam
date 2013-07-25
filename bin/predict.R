@@ -7,31 +7,54 @@ library(e1071)
 library(rpart)
 
 # Grab all command line args
-allArgs = commandArgs(trailingOnly = TRUE) # [1]svm_model, [2]weather_forecast, [3]where_to_save_predictions
+#allArgs = commandArgs(trailingOnly = TRUE) # [1]svm_model, [2]weather_forecast, [3]where_to_save_predictions, [4]Num_of_historic_hours_considered 
 
 # For testing - should be commented when run from command line
-# setwd("/home/marc/Dropbox/Work/Work at FOD/Data Analysis/R for Webapp")
-# allArgs = c("svmModel.RData", "sampleWeatherForecast.csv", "predictions.csv")
+setwd("/home/marc/mcgill-steam/bin")
+allArgs = c("svmModel.RData", "sampleWeatherForecast.csv", "predictions.csv","3")
 
 # Load SVM model 
 load(allArgs[1])
 
-# Import weather forecast - assumes an include 3 "historic values"
+# Check number of historic hours considered is the same as model
+N <- as.numeric(allArgs[4]) # The amount back in time to consider in the trend.
+stopifnot(N == numHistHrsCon)
+
+# Import weather forecast
 rawWeather <-read.csv(allArgs[2]) 
-weatherForecast <- rawWeather[2:7] # Drop the date
+weatherForecast <- rawWeather[-1] # Drop the date
+L <- length(weatherForecast[[1]]) # The total number of rows
 
-# Make time lagged variables (i.e. training on a "trend" in temperature)
-Temp1 <- c(NA, weatherForecast[[2]])[1:length(weatherForecast[[2]])]
-Temp2 <- c(NA, NA, weatherForecast[[2]])[1:length(weatherForecast[[2]])]
-Temp3 <- c(NA, NA, NA, weatherForecast[[2]])[1:length(weatherForecast[[2]])]
-toInsert<- cbind(Temp1,Temp2,Temp3)
+# Make time lagged variables (i.e. to train on a "trend" in temperature)
+posOfTemp <- 2;
+posOfHumd <- 4;
 
-# Insert time delayed variables and cut off first 3 hours
-weatherForecast <- data.frame(weatherForecast[,1:2],toInsert,weatherForecast[,3:6])
-weatherForecast <- weatherForecast[4:nrow(weatherForecast),]
+# First do Temperature
+historicTemp <- weatherForecast[[posOfTemp]] # First save the columns of data as they stand.
+insertAfter <- posOfTemp # Keep track of where to put the time delayed column.
+
+for (i in 1:N) {
+  historicTemp <- c(NA, historicTemp)[1:L] #Append an NA before first entry, then clip the end
+  weatherForecast <- data.frame(weatherForecast[1:insertAfter], historicTemp, weatherForecast[-(1:insertAfter)])
+  insertAfter <- insertAfter + 1;
+}
+
+# Now do humidity
+posOfHumd <- posOfHumd + N # Keep in mind everything is wider by N now.
+historicHumd <- weatherForecast[[posOfHumd]] 
+insertAfter <- posOfHumd # Keep track of where to put the time delayed column.
+
+for (i in 1:N) {
+  historicHumd <- c(NA, historicHumd)[1:L] #Append an NA before first entry, then clip the end
+  weatherForecast <- data.frame(weatherForecast[1:insertAfter], historicHumd, weatherForecast[-(1:insertAfter)])
+  insertAfter <- insertAfter + 1;
+}
+ 
+# Cut of begining
+weatherForecast <- weatherForecast[-(1:N),]
 
 # Make predictions
-SteamForecast <- as.vector(predict(svmModel, weatherForecast[,-ncol(weatherForecast)])) #Note the removal of the final col
+SteamForecast <- as.vector(predict(svmModel, weatherForecast))
 
 # Combine with dates and save output as CSV
 Date <- as.vector(rawWeather[[1]])[-(1:3)]

@@ -32,8 +32,9 @@ run once a week or so. Most hours we will just need predict.R
 
 Note B) sampleWeatherForecast.csv actually has 27 entries... that is because the
 svm model is design to use a weather "trend" i.e. predict based on a moving 
-window. So the first 3 lines of data should be old data from records, while the 
-next 24 lines should be the most recent weather forecast from Pulse.
+window. So the first 3 (specified by the final command line input) lines of data 
+should be old data from records, while the next 24 lines should be the most 
+recent weather forecast from Pulse.
 
 Note C) This might get you started running R on Heroku
 https://github.com/virtualstaticvoid/heroku-buildpack-r

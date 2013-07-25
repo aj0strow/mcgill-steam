@@ -2,3 +2,6 @@ config/environment_variables.rb
 *.RData
 *.lock
 logfile
+
+# Any temp files
+*~
