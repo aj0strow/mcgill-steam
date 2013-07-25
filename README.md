@@ -83,12 +83,8 @@ The `predicted_for` need not be unique, but it is the natural key and is indexed
 
 ### Calculating Steam
 
-Steam is calculated as a function: `steam = f(weekday, hour_of_day, temperature, wind_speed, radiation, humidity)`
-
-... marc? ...
+Steam is forecasted using the libsvm package in R.
 
 ### Calculating Confidence
 
-Confidence is determined as follows:
-
-... marc? ...
+Confidence is determined as follows: - TBD
