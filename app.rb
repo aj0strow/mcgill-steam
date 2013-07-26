@@ -23,6 +23,7 @@ end
 DataMapper.auto_upgrade!
 
 require_relative 'lib/pulse'
+require_relative 'lib/predictions'
 
 get '/' do
   erb :index

@@ -3,7 +3,6 @@ require 'time'
 require 'async_enum'
 
 module Pulse
-  
   RESOURCES = [ :temperature, :wind_speed, :radiation, :humidity, :steam ].freeze
   POINTS = Hash[ RESOURCES.zip([ 66077, 66096, 66094, 66095, 45924 ]) ].freeze
   KEYS = Hash[ RESOURCES.zip(ENV['PULSE_KEYS'].split('|')) ].freeze
@@ -76,7 +75,6 @@ module Pulse
     time = datetime.to_time
     Base.fetch_resources(time).values
   end
-  
 end
 
 
