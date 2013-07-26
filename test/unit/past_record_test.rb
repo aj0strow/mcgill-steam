@@ -11,9 +11,17 @@ class PastRecordTest < Test
   end
   
   test 'recorded_at is unique' do
-    other = PastRecord.gen
-    @record.recorded_at = other.recorded_at
+    date_time = DateTime.parse('2012-10-19T01:30Z')
+    other = PastRecord.gen(recorded_at: date_time)
+    @record.recorded_at = date_time
     refute @record.save    
+  end
+  
+  test 'recorded_at matches' do
+    date_time = DateTime.now
+    @record.recorded_at = date_time
+    @record.save
+    assert_equal date_time.iso8601, @record.reload.recorded_at.iso8601
   end
 
   test 'temperature required' do
