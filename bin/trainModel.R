@@ -8,21 +8,49 @@ library(e1071)
 library(rpart)
 
 # Grab all command line args
-allArgs = commandArgs(trailingOnly = TRUE) # [1]training_set, [2]where_to_save_model
+allArgs = commandArgs(trailingOnly = TRUE) # [1]training_set, [2]where_to_save_model, [3] Num_of_historic_hours_considered
+
+# For testing - should be commented when run from command line
+setwd("/home/marc/mcgill-steam/bin")
+allArgs = c("sampleTrainingSet.csv", "svmModel.RData", "3")
 
 # Import training set
 temp <-read.csv(allArgs[1]) 
-trainingSet <- temp[2:7] # Drop the date
+trainingSet <- temp[-1] # Drop the date
+# Import weather forecast
+L <- length(trainingSet[[1]]) # The total number of rows
 
-# Make time lagged variables (i.e. training on a "trend" in temperature)
-Temp1 <- c(NA, trainingSet[[2]])[1:length(trainingSet[[2]])]
-Temp2 <- c(NA, NA, trainingSet[[2]])[1:length(trainingSet[[2]])]
-Temp3 <- c(NA, NA, NA, trainingSet[[2]])[1:length(trainingSet[[2]])]
-toInsert<- cbind(Temp1,Temp2,Temp3)
+# Check the number of historic hours to be considered in the model
+N <-as.numeric(allArgs[3])
+numHistHrsCon <- N # For checking by predict.R later
 
-# Insert time delayed variables and cut off first 3 hours
-trainingSet <- data.frame(trainingSet[,1:2],toInsert,trainingSet[,3:6])
-trainingSet <- trainingSet[4:nrow(trainingSet),]
+# Make time lagged variables (i.e. to train on a "trend" in temperature)
+posOfTemp <- 2; #Need to keep track of this
+posOfHumd <- 4;
+
+# First do Temperature
+historicTemp <- trainingSet[[posOfTemp]] # First save the columns of data as they stand.
+insertAfter <- posOfTemp # Keep track of where to put the time delayed column.
+
+for (i in 1:N) {
+  historicTemp <- c(NA, historicTemp)[1:L] #Append an NA before first entry, then clip the end
+  trainingSet <- data.frame(trainingSet[1:insertAfter], historicTemp, trainingSet[-(1:insertAfter)])
+  insertAfter <- insertAfter + 1;
+}
+
+# Now do humidity
+posOfHumd <- posOfHumd + N # Keep in mind everything is wider by N now.
+historicHumd <- trainingSet[[posOfHumd]] 
+insertAfter <- posOfHumd # Keep track of where to put the time delayed column.
+
+for (i in 1:N) {
+  historicHumd <- c(NA, historicHumd)[1:L] #Append an NA before first entry, then clip the end
+  trainingSet <- data.frame(trainingSet[1:insertAfter], historicHumd, trainingSet[-(1:insertAfter)])
+  insertAfter <- insertAfter + 1;
+}
+ 
+# Cut of begining
+trainingSet <- trainingSet[-(1:N),]
 
 # Use to fine tune parameters - loooong run-times
 # Tuner <- tune.svm(Steam ~ ., data = trainning.set, gamma = 10^(-3:1), cost = 10^(0:3))
@@ -31,5 +59,5 @@ trainingSet <- trainingSet[4:nrow(trainingSet),]
 svmModel <- svm(Steam ~ .,data = trainingSet, cost = 100, gamma = 0.1) # "cost" and "gamma" from Tuner
 
 # Save the model for later use
-save(svmModel, file = allArgs[2])
+save(svmModel, numHistHrsCon, file = allArgs[2])
 
