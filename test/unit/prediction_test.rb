@@ -21,4 +21,9 @@ class PredictionTest < Test
     refute @prediction.save
   end
   
+  test 'get most recent prediction' do
+    most_recent = Prediction.gen(predicted_for: @prediction.predicted_for)
+    assert_equal most_recent, Prediction.for(@prediction.predicted_for)
+  end
+  
 end

@@ -12,6 +12,14 @@ class Prediction
   
   # auto-updated, READ ONLY!
   property :updated_at, DateTime, required: false
+  
+  def self.for(date_time)
+    # the sql order cannot be trusted with nanosecond differences
+    # so we need to sort too
+    
+    matches = all(predicted_for: date_time, order: [ :updated_at.asc ])
+    matches.sort_by(&:updated_at).last
+  end
 end
 
 class PastRecord

@@ -2,7 +2,6 @@ module Predictions
   class InvalidPredictionError < ArgumentError; end
   
   class << self
-    
     def generate_training_csv
       CSV.generate do |csv|
         csv << %w(Date Hour Temp Radiation Humidity WindSpeed Steam)
@@ -38,6 +37,7 @@ module Predictions
     
     
     private
+    
     
     def recent_past_records(n_hours)
       PastRecord.all(limit: n_hours, order: [ :recorded_at.desc ]).to_a.reverse
