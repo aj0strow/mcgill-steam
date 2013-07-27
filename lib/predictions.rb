@@ -1,5 +1,5 @@
 module Predictions
-  
+  class InvalidPredictionError < ArgumentError; end
   
   class << self
     
@@ -19,6 +19,17 @@ module Predictions
           csv << normalize(record, false)
         end
       end
+    end
+    
+    def save_predictions(csv)
+      rows = CSV.parse(csv, headers: true, return_headers: false)
+      predictions = rows.map do |row|
+        date_time = DateTime.parse(row['Date'])
+        steam_amount = row['SteamForecast'].to_f
+        Prediction.new(predicted_for: date_time, steam: steam_amount)
+      end
+      raise(InvalidPredictionError, csv) unless predictions.all?(&:valid?)
+      predictions.each(&:save)
     end
     
     def predict_steam_csv(svm_model, weather_forecast_csv)
