@@ -25,7 +25,8 @@ namespace :predictions do
   end
   
   task :train_model => :training_csv do
-    system "Rscript bin/trainModel.r #{training_csv} #{svm_model} #{OFFSET}"
+    script = File.expand_path('bin/trainModel.r')
+    system "Rscript #{script} #{training_csv} #{svm_model} #{OFFSET}"
   end
   
   task :forecast_csv, [:amount] => :environment do |task, args|
@@ -46,7 +47,8 @@ namespace :predictions do
   task :steam, [:hours] do |task, args|
     hours = args[:hours] || 24
     Rake::Task['predictions:forecast_csv'].invoke(hours.to_i + OFFSET)
-    `Rscript bin/predict.r #{svm_model} #{forecast_csv} #{predictions_csv} #{OFFSET}`
+    script = File.expand_path('bin/predict.r')
+    system "Rscript #{script} #{svm_model} #{forecast_csv} #{predictions_csv} #{OFFSET}"
   end
   
   task :generate => :environment do
