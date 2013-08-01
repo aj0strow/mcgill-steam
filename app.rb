@@ -32,9 +32,10 @@ end
 get '/records.json' do
   days = params[:days].to_i
   days = 10 if days <= 0
-  records = PastRecord.all(:order => :recorded_at.desc, :limit => days * 24, :steam.not => nil)
+  records = PastRecord.all(:order => :recorded_at.desc, :limit => days * 24).to_a.reverse
   structs = records.map do |record|
-    { datetime: record.recorded_at.to_time.utc.iso8601, steam: record.steam }
+    steam = record.steam || Prediction.for(record.recorded_at).steam
+    { datetime: record.recorded_at.to_time.utc.iso8601, steam: steam }
   end
   content_type :json
   MultiJson.dump(structs)

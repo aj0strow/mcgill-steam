@@ -30,4 +30,19 @@ class AppTest < Test
     assert_equal 5, json.count
   end
   
+  test 'GET /records.json with predictions' do
+    PastRecord.all.destroy
+    5.times{ PastRecord.gen }
+    3.times{ PastRecord.gen(steam: nil) }
+    PastRecord.all(steam: nil).each do |record|
+      Prediction.create(predicted_for: record.recorded_at, steam: 1000.5)
+    end
+    
+    get '/records.json'
+    
+    json = MultiJson.load(last_response.body)
+    assert_equal 8, json.count
+    assert_equal 1000.5, json.last['steam']
+  end
+  
 end
