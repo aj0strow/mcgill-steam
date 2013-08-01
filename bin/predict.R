@@ -6,12 +6,11 @@
 library(e1071)
 library(rpart)
 
-# Grab all command line args
-#allArgs = commandArgs(trailingOnly = TRUE) # [1]svm_model, [2]weather_forecast, [3]where_to_save_predictions, [4]Num_of_historic_hours_considered 
+cat("Predicting steam values... ")
 
-# For testing - should be commented when run from command line
-setwd("/home/marc/mcgill-steam/bin")
-allArgs = c("svmModel.RData", "sampleWeatherForecast.csv", "predictions.csv","3")
+# Grab all command line args
+allArgs = commandArgs(trailingOnly = TRUE) 
+# [1]svm_model, [2]weather_forecast, [3]where_to_save_predictions, [4]Num_of_historic_hours_considered 
 
 # Load SVM model 
 load(allArgs[1])
@@ -59,3 +58,5 @@ SteamForecast <- as.vector(predict(svmModel, weatherForecast))
 # Combine with dates and save output as CSV
 Date <- as.vector(rawWeather[[1]])[-(1:3)]
 write.csv(cbind(Date, SteamForecast), file = allArgs[3], row.names = FALSE)
+
+cat("complete!\n")

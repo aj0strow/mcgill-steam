@@ -7,12 +7,10 @@
 library(e1071)
 library(rpart)
 
+cat("Training SVM model... ")
+
 # Grab all command line args
 allArgs = commandArgs(trailingOnly = TRUE) # [1]training_set, [2]where_to_save_model, [3] Num_of_historic_hours_considered
-
-# For testing - should be commented when run from command line
-setwd("/home/marc/mcgill-steam/bin")
-allArgs = c("sampleTrainingSet.csv", "svmModel.RData", "3")
 
 # Import training set
 temp <-read.csv(allArgs[1]) 
@@ -60,4 +58,6 @@ svmModel <- svm(Steam ~ .,data = trainingSet, cost = 100, gamma = 0.1) # "cost" 
 
 # Save the model for later use
 save(svmModel, numHistHrsCon, file = allArgs[2])
+cat("complete!\n")
+
 
