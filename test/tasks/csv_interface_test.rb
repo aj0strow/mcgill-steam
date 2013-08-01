@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CSVTest < Test
+class CSVInterfaceTest < Test
   setup do
     @past_record_attributes = {
       recorded_at: DateTime.parse('2012-10-19T01:00-04:00'), 
@@ -15,7 +15,7 @@ class CSVTest < Test
   
   test 'normalize past_record for csv' do
     @past_record = PastRecord.create(@past_record_attributes)
-    expected = [ '10/19/2012 1:00', '2', 13.8, -39, 0.61, 3.611111111, 9300 ]
+    expected = [ '2012-10-19T01:00:00-04:00', '2', 13.8, -39, 0.61, 3.611111111, 9300 ]
     normalized = Predictions.send(:normalize, @past_record)
     assert_equal expected, normalized
   end
@@ -41,9 +41,9 @@ class CSVTest < Test
     end
     expected = [
       'Date,Hour,Temp,Radiation,Humidity,WindSpeed,Steam',
-      '10/19/2012 1:00,2,13.8,-39,0.61,3.611111111,9300',
-      '10/19/2012 2:00,3,12.5,-41,0.59,3.611111111,9300',
-      '10/19/2012 3:00,4,11.9,-42,0.64,3.611111111,8400', ''
+      '2012-10-19T01:00:00-04:00,2,13.8,-39.0,0.61,3.611111111,9300.0',
+      '2012-10-19T02:00:00-04:00,3,12.5,-41.0,0.59,3.611111111,9300.0',
+      '2012-10-19T03:00:00-04:00,4,11.9,-42.0,0.64,3.611111111,8400.0', ''
     ].join("\n")
     csv = Predictions.send(:generate_training_csv)
     assert_equal expected, csv
@@ -72,11 +72,24 @@ class CSVTest < Test
     end
     expected = [
       'Date,Hour,Temp,Radiation,Humidity,WindSpeed',
-      '10/19/2012 1:00,2,13.8,-39,0.61,3.611111111',
-      '10/19/2012 2:00,3,12.5,-41,0.59,3.611111111',
-      '10/19/2012 3:00,4,11.9,-42,0.64,3.611111111', ''
+      '2012-10-19T01:00:00-04:00,2,13.8,-39.0,0.61,3.611111111',
+      '2012-10-19T02:00:00-04:00,3,12.5,-41.0,0.59,3.611111111',
+      '2012-10-19T03:00:00-04:00,4,11.9,-42.0,0.64,3.611111111', ''
     ].join("\n")
     csv = Predictions.send(:generate_weather_forecast_csv, 27)
     assert_equal expected, csv
+  end
+  
+  test 'save predictions from CSV' do
+    Prediction.all.destroy
+    predictions_csv = [
+      '"Date","SteamForecast"',
+      '"2013-02-27T00:00:00-04:00","32977.107362766"',
+      '"2013-02-27T01:00:00-04:00","32778.3239391544"',
+      '"2013-02-27T02:00:00-04:00","35496.1768815789"'
+    ].join("\n")
+    Predictions.save_predictions(predictions_csv)
+    assert_equal 3, Prediction.count
+    assert_equal 32977.107362766, Prediction.first.steam    
   end
 end

@@ -11,7 +11,6 @@ module Pulse
     include HTTParty
     
     class << self
-      
       def url(resource)
         point = POINTS[resource]
         "https://api.pulseenergy.com/pulse/1/points/#{point}/data.json"
@@ -67,7 +66,6 @@ module Pulse
         end
         records
       end
-
     end
   end
   

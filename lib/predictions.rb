@@ -49,17 +49,15 @@ module Predictions
     
     def normalize(past_record, include_steam = true)
       recorded_at = past_record.recorded_at
-      date_time = recorded_at.strftime('%m/%d/%Y ') + recorded_at.strftime('%k:%M').strip
       hour = recorded_at.strftime('%k').strip.next
-      normalized = [ 
-        date_time, 
-        hour,
-        past_record.temperature,
-        past_record.radiation.floor,
-        past_record.humidity,
-        past_record.wind_speed
+      normalized = [
+        recorded_at.iso8601,
+        hour
       ]
-      normalized << past_record.steam.floor if include_steam
+      %w(temperature radiation humidity wind_speed).each do |attribute|
+        normalized << past_record.send(attribute)
+      end
+      normalized << past_record.steam if include_steam
       normalized
     end
     
