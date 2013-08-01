@@ -13,3 +13,12 @@ task :environment do
 end
 
 Dir.glob('lib/tasks/*.rake').each{ |task| import task }
+
+task :hourly do
+  Rake::Task['pulse:fetch'].invoke
+  Rake::Task['predictions:generate'].invoke
+end
+
+task :weekly do
+  Rake::Task['predictions:train_model'].invoke
+end
