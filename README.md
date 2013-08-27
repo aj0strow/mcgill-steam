@@ -16,13 +16,45 @@ $ git clone git@github.com:aj0strow/mcgill-steam.git
 $ cd mcgill-steam
 ```
 
-See the environment variables section below, add the file, and then run:
+**See the Postgres and Environement Variables sections below.**
+
+To start the server:
 
 ```
 $ rackup -p 1234
 ```
 
 View the website at http://localhost:1234/.
+
+### Postgres
+
+Make sure you have Postgres database installed and running. To start it:
+
+```
+$ pg_ctl -D /usr/local/var/postgres -l logfile start
+```
+
+If you havent added the admin pack, add it:
+
+```
+$ psql postgres -c 'CREATE EXTENSION "adminpack";'
+```
+
+And go into the database shell to add the user:
+
+```
+$ psql -d postgres
+postgres=# create role mcgill_steam login createdb;
+postgres=# \q
+```
+
+Finally, create the development database:
+
+```
+$ createdb -E UTF8 -w -O mcgill_steam mcgill_steam_development
+```
+
+See more about Postgres at the bottom of this: http://www.ajostrow.me/thoughts/installing-and-using-postgresql-on-osx-with-rails#nav
 
 ### Environment Variables
 
@@ -38,12 +70,39 @@ ENV['PULSE_KEYS'] = '*********|********|********|********|********'
 It will be set on the production machine as a real environment variable. 
 
 ### Rake Tasks
+
+For the scheduler:
+
+```
+$ rake hourly
+$ rake weekly
+```
+
+Fetch pulse data for the date specified (default is now) and create or update 48 PastRecords for each hour.
+
 ```
 $ rake pulse:fetch
 $ rake pulse:fetch[2013-07-03T03:00:00]
 ```
 
-Fetch pulse data for the date specified (default is yesterday) and create 24 PastRecords for each hour.
+Create and drop database:
+
+```
+$ rake db:create
+$ rake db:drop
+```
+
+Train the SVM model:
+
+```
+$ rake predictions:train_model
+```
+
+To generate steam predictions:
+
+```
+$ rake predictions:generate
+```
 
 ### Useful Links
 
