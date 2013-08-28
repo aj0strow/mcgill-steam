@@ -104,6 +104,8 @@ To generate steam predictions:
 $ rake predictions:generate
 ```
 
+For more documentation, see `/lib/tasks/README.md`.
+
 ### Useful Links
 
 Pulse energy API documentation: http://developer.pulseenergy.com/ (100 req/hr limit)
