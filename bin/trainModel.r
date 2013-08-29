@@ -12,6 +12,9 @@ cat("Training SVM model... ")
 # Grab all command line args
 allArgs = commandArgs(trailingOnly = TRUE) # [1]training_set, [2]where_to_save_model, [3] Num_of_historic_hours_considered
 
+# Uncomment for debugging
+# allArgs = c("sampleTrainingSet.csv", "svmModel.RData", 3)
+
 # Import training set
 temp <-read.csv(allArgs[1]) 
 trainingSet <- temp[-1] # Drop the date
@@ -47,7 +50,7 @@ for (i in 1:N) {
   insertAfter <- insertAfter + 1;
 }
  
-# Cut of begining
+# Cut off begining
 trainingSet <- trainingSet[-(1:N),]
 
 # Use to fine tune parameters - loooong run-times

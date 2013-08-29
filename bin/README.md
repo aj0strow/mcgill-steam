@@ -14,7 +14,7 @@ $ brew install gfortran
 $ brew install R
 ```
 
-Installing pachages is done in the R console, or in the `init.r` script:
+Installing packages is done in the R console, or in the `init.r` script:
 
 ```R
 install.packages('e1071')

@@ -12,6 +12,9 @@ cat("Predicting steam values... ")
 allArgs = commandArgs(trailingOnly = TRUE) 
 # [1]svm_model, [2]weather_forecast, [3]where_to_save_predictions, [4]Num_of_historic_hours_considered 
 
+# Uncomment for debugging
+# allArgs = ("svmModel.RData", "sampleWeatherForecast.csv", "predictions.csv", 3)
+
 # Load SVM model 
 load(allArgs[1])
 
