@@ -26,6 +26,7 @@ namespace :pulse do
     end
   end
   
+  desc 'fetch pulse data for 48 hours'
   # time represents 48 hours, so +/- 24 hours
   task :fetch, [:time] => :environment do |task, args|
     time = interpret_time(args[:time])
