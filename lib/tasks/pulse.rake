@@ -3,11 +3,11 @@ namespace :pulse do
     print 'Interpreted time: '
     time = case input
     when nil, ''
-      Time.now
+      DateTime.now
     when String
-      Time.parse(input)
+      DateTime.parse(input)
     else
-      input.to_time
+      input.to_datetime
     end
     puts time.iso8601
     time
@@ -26,18 +26,30 @@ namespace :pulse do
     end
   end
   
-  desc 'fetch pulse data for 48 hours'
-  # time represents 48 hours, so +/- 24 hours
-  task :fetch, [:time] => :environment do |task, args|
-    time = interpret_time(args[:time])
-    print 'Fetching and creating PastRecords... '
-    day = 60 * 60 * 24
-    records = Pulse.fetch_records(time) + Pulse.fetch_records(time - day)
+  def fetch_and_save(datetime)
+    print "Fetching and saving 24 hourly PastRecords from #{datetime}... "
+    records = Pulse.fetch_records(datetime)
     records.map! do |attrs|
       record = PastRecord.first_or_new(recorded_at: attrs[:recorded_at])
       record.attributes = attrs
       record
     end
     try_to_save records
+  end
+  
+  desc 'fetch pulse data for 48 hours'
+  # time represents 48 hours, so +/- 24 hours
+  task :fetch, [:time] => :environment do |task, args|
+    datetime = interpret_time(args[:time])
+    fetch_and_save(datetime - 1)
+    fetch_and_save(datetime)
+  end
+  
+  task :populate, [:start, :end] => :environment do |task, args|
+    start_time = interpret_time(args[:start])
+    end_time = interpret_time(args[:end])
+    (start_time..end_time).step(1).each do |datetime|
+      fetch_and_save(datetime)
+    end
   end
 end
