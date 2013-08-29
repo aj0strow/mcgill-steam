@@ -45,6 +45,7 @@ namespace :pulse do
     fetch_and_save(datetime)
   end
   
+  desc 'populate pulse data for each time in range'
   task :populate, [:start, :end] => :environment do |task, args|
     start_time = interpret_time(args[:start])
     end_time = interpret_time(args[:end])
@@ -52,4 +53,15 @@ namespace :pulse do
       fetch_and_save(datetime)
     end
   end
+  
+  task :newest => :environment do
+    puts "Newest record: #{ PastRecord.max(:recorded_at) }"
+  end
+  
+  task :oldest => :environment do
+    puts "Oldest record: #{ PastRecord.min(:recorded_at) }"
+  end
+  
+  desc 'print newest and oldest record times'
+  task :range => [ :newest, :oldest ]
 end
