@@ -82,6 +82,40 @@ Rounds the provided iso datetime (default current time) to the nearest hour. The
 
 A full 48 hour window was necessary, as the real steam values lagged a bit behind reality. 
 
+```
+$ rake pulse:populate[start-date,end-date]
+```
+
+Populates each day in the date range, from the first date to the last with hourly pulse data. For example, the summer of 2011 could be fetched with `rake pulse:populate[2011-06-01,2011-08-31]`. 
+
+**Warning: Pulse has rate limits. Not sure what happens when they are breeched.**
+
+### Records
+
+```
+$ rake records:newest
+```
+
+Prints the iso datetime of the newest PastRecord.
+
+```
+$ rake records:oldest
+```
+
+Prints the iso datetime of the oldest PastRecord.
+
+```
+$ rake records:range
+```
+
+Prints the iso datetimes of the newest and oldest PastRecords.
+
+```
+$ rake records:gaps
+```
+
+Prints each gap for PastRecords (where there is more than 1 hour in between). If there are no gaps, it will say there are none. 
+
 -----
 
 AJ Ostrow, August, 2013

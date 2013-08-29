@@ -53,15 +53,4 @@ namespace :pulse do
       fetch_and_save(datetime)
     end
   end
-  
-  task :newest => :environment do
-    puts "Newest record: #{ PastRecord.max(:recorded_at) }"
-  end
-  
-  task :oldest => :environment do
-    puts "Oldest record: #{ PastRecord.min(:recorded_at) }"
-  end
-  
-  desc 'print newest and oldest record times'
-  task :range => [ :newest, :oldest ]
 end
