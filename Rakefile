@@ -14,6 +14,7 @@ end
 
 Dir.glob('lib/tasks/*.rake').each{ |task| import task }
 
+desc 'fetch pulse records and generate steam predictions'
 task :hourly do
   Rake::Task['pulse:fetch'].invoke
   Rake::Task['predictions:generate'].invoke

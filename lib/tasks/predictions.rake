@@ -58,4 +58,12 @@ namespace :predictions do
     Rake::Task['predictions:steam'].invoke(hours.to_i)
     Rake::Task['predictions:save'].invoke()
   end
+  
+  desc 'delete week old predictions'
+  task :clean => :environment do
+    old_predictions = Prediction.all(:predicted_for.lt => DateTime.now - 7)
+    print "Destroying #{old_predictions.count} old predictions... "
+    old_predictions.destroy
+    puts 'complete!'
+  end
 end
