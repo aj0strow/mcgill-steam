@@ -31,10 +31,6 @@ module Predictions
       predictions.each(&:save)
     end
     
-    def predict_steam_csv(svm_model, weather_forecast_csv)
-      `Rscript predict.r "$PWD/svmModel.RData" "$PWD/sampleWeatherForecast.csv" "$PWD/predictions.csv" "3"`
-    end
-    
     
     private
     
