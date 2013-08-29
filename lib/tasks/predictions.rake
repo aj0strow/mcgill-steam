@@ -17,7 +17,6 @@ namespace :predictions do
     File.expand_path('tmp/predictions.csv')
   end
   
-  desc 'generate and save training data to csv'
   task :training_csv => :environment do
     print 'Generating training data... '
     csv = Predictions.generate_training_csv
@@ -25,13 +24,12 @@ namespace :predictions do
     puts 'complete!'
   end
   
-  desc 'train and overwrite svm model with csv'
+  desc 'train and overwrite svm model'
   task :train_model => :training_csv do
     script = File.expand_path('bin/trainModel.r')
     system "Rscript #{script} #{training_csv} #{svm_model} #{OFFSET}"
   end
   
-  desc 'generate and save weather forecast csv'
   task :forecast_csv, [:amount] => :environment do |task, args|
     print 'Writing weather forecast... '
     amount = args[:amount] || 27
@@ -40,7 +38,6 @@ namespace :predictions do
     puts 'complete!'
   end
   
-  desc 'save csv steam predictions to database'
   task :save => :environment do
     print 'Saving predictions... '
     predictions = IO.read(predictions_csv)
@@ -48,7 +45,6 @@ namespace :predictions do
     puts 'complete!'
   end
   
-  desc 'predict steam from weather forecast csv'
   task :steam, [:hours] do |task, args|
     hours = args[:hours] || 24
     Rake::Task['predictions:forecast_csv'].invoke(hours.to_i + OFFSET)
