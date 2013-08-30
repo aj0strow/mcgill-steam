@@ -2,8 +2,7 @@ config/environment_variables.rb
 *.RData
 *.lock
 logfile
-tmp/*.csv
-tmp/*.RData
+tmp/*
 
 # Any temp files
 *~

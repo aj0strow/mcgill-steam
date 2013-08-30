@@ -22,6 +22,7 @@ end
 
 DataMapper.auto_upgrade!
 
+require_relative 'config/carrierwave'
 require_relative 'lib/pulse'
 require_relative 'lib/predictions'
 
