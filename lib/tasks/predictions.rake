@@ -8,10 +8,8 @@ namespace :predictions do
   end
   
   # push file to cloud
-  def push(*filename)
-    filenames.each do |filename|
-      File.open(filename, 'r'){ |f| Uploader.new.store! f }
-    end
+  def push(filename)
+    File.open(filename, 'r'){ |f| Uploader.new.store! f }
   end
   
   # pull file from cloud
