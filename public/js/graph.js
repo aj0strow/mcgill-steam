@@ -104,7 +104,13 @@
     xAxis.call(axes.x);
     yAxis.call(axes.y);
     
-    // add graph line
+    // current time line
+    var currentTimeX = scale.x(new Date());    
+    svg.append('path')
+      .attr('class', 'current-time')
+      .attr('d', ['M', currentTimeX, '-20', 'L', currentTimeX, height + 3].join(' '));
+      
+    // add graph line (connect the dots)
     svg.append('path')
       .datum(data)
       .attr('class', 'line')
@@ -124,6 +130,6 @@
       .on('mouseout', pointout);
   }
 
-  d3.json('/records.json', update);
+  d3.json('/records.json?days=2', update);
 
 })();
