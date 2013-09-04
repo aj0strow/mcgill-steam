@@ -9,20 +9,21 @@
 <body>
   <div class="container" id="header">
     <div class="row">
-      <div class="three columns">
+      <div class="six columns" id="title">
+        <img id="mcgill" src="/images/mcgill.png">
+        <div id="title-text">Steam Predictions</div>
+      </div>
+      <div class="three columns right">
+        <a href="https://mcgill.pulseenergy.com/#/overview" target="_blank">
+          <img src="/images/pulse.png" alt="Pulse API Dashboard">
+        </a>
+      </div>
+      <div class="three columns right">
         <a href="http://mcgillenergyproject.wordpress.com/" target="_blank">
           <img src="/images/mep.png" alt="MEP">
         </a>
       </div>
-      <div class="six columns">
-        <h3>McGill Steam Predictions</h3>
-      </div>
-      <div class="three columns">
-        <a href="https://mcgill.pulseenergy.com/#/overview">
-          <img src="/images/pulse.png" alt="Pulse API Dashboard">
-        </a>
-      </div>
-   </div>
+    </div>
   </div>
   <div class="container">
    <div class="row">
@@ -31,17 +32,20 @@
    <div class="row">
      <div class="twelve columns">
        <div class="panel">
-         Explanation here!
+         Students of the <a href="http://mcgillenergyproject.wordpress.com/" target="_blank">McGill Energy Project</a>,
+         designed this application in conjunction with <a href="http://www.mcgill.ca/facilities/utilities" 
+         target="_blank">Utilities and Energy Management</a> to help Powerhouse operating staff with day-to-day
+         decision making. It uses historic campus steam consumption data from 
+         <a href="https://mcgill.pulseenergy.com/#/overview" target="_blank">Pulse Energy</a>, and combines it with 
+         weather data in a machine learning algorithm to generate steam forecasts. Operating staff can use these 
+         forecasts to make more informed decisions regarding efficient equipment use, ultimately saving energy. 
+         <br><br>
+         <em>Please note that the application is still in development.</em>
        </div>
      </div>
    </div>
   </div>
   <div id="footer" class="container">
-    <div class="row">
-      <div class="twelve columns">
-        Footer Content
-      </div>
-    </div>
     <div class="row">
       <div class="twelve columns">
         <p>&copy; <%= Date.today.year %> Marc-Etienne Brunet and Alexander Ostrow</p>
